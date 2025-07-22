@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la tâche{% endblock %}
+
+{% block body %}
+    <h1>Détails de la tâche</h1>
+
+    <table>
+        <tr>
+            <th>Titre</th>
+            <td>{{ tache.titre }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ tache.description }}</td>
+        </tr>
+        <tr>
+            <th>Date limite</th>
+            <td>{{ tache.dateLimite ? tache.dateLimite|date('d/m/Y') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Terminée</th>
+            <td>{{ tache.terminee ? '✔️' : '❌' }}</td>
+        </tr>
+        <tr>
+            <th>Priorité</th>
+            <td>{{ tache.priorite }}</td>
+        </tr>
+    </table>
+
+    <div class="btn-show-group">
+        <a href="{{ path('app_tache_index') }}">Retour à la liste</a>
+        <a href="{{ path('app_tache_edit', {'id': tache.id}) }}">Modifier</a>
+    </div>
+{% endblock %}

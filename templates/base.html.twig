@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Symfony Project{% endblock %}</title>
+    {% block stylesheets %}
+    <style>
+        /* Reset basique */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0 1rem 2rem 1rem;
+            color: #333;
+        }
+
+        /* Conteneur principal */
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem 3rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+        }
+
+        /* Titres */
+        h1, h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* Formulaires */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            display: block;
+            color: #34495e;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea {
+            padding: 0.6rem 0.9rem;
+            border: 1.5px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            width: 100%;
+            resize: vertical;
+            font-family: inherit;
+            color: #2c3e50;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        textarea:focus {
+            border-color: #8e44ad;
+            outline: none;
+            box-shadow: 0 0 6px #8e44adaa;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 600;
+            color: #34495e;
+        }
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #8e44ad;
+        }
+
+        button[type="submit"],
+        .btn-cancel {
+            cursor: pointer;
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.8rem;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            user-select: none;
+            align-self: center;
+            margin-top: 1.5rem;
+            box-shadow: 0 3px 8px rgb(142 68 173 / 0.4);
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        button[type="submit"]:hover,
+        .btn-cancel:hover,
+        .btn-action:hover {
+            background-color: #732d91;
+        }
+
+        .btn-cancel {
+            background-color: #bdc3c7;
+            color: #2c3e50;
+            margin-left: 1rem;
+            padding: 0.75rem 1.2rem;
+            box-shadow: none;
+            font-weight: 500;
+        }
+        .btn-cancel:hover {
+            background-color: #95a5a6;
+            color: #1b1b1b;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Messages flash */
+        .flash-success {
+            max-width: 600px;
+            margin: 1rem auto;
+            padding: 1rem 1.5rem;
+            background-color: #27ae601a; /* vert léger */
+            border: 1.5px solid #27ae60;
+            color: #27ae60;
+            border-radius: 5px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 0 8px #27ae6055;
+        }
+        .flash-error {
+            max-width: 600px;
+            margin: 1rem auto;
+            padding: 1rem 1.5rem;
+            background-color: #e74c3c1a; /* rouge léger */
+            border: 1.5px solid #e74c3c;
+            color: #e74c3c;
+            border-radius: 5px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 0 8px #e74c3c55;
+        }
+
+        /* Tableau */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: #2c3e50;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.65rem 0.9rem;
+            text-align: left;
+        }
+        th {
+            background-color: #8e44ad;
+            color: white;
+            font-weight: 700;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Actions boutons dans tableau */
+        .btn-action {
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.35rem 0.7rem;
+            font-size: 0.85rem;
+            margin-right: 0.4rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+        .btn-action.delete {
+            background-color: #e74c3c;
+            box-shadow: 0 0 8px #e74c3c66;
+        }
+        .btn-action.delete:hover {
+            background-color: #c0392b;
+        }
+
+        /* Bouton "Créer une nouvelle tâche" en bas, couleur différente */
+        .btn-create-new {
+            display: inline-block;
+            margin: 2rem auto 0 auto;
+            padding: 0.9rem 2.5rem;
+            background-color: #27ae60; /* vert frais */
+            color: white;
+            font-weight: 700;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgb(39 174 96 / 0.5);
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+        .btn-create-new:hover {
+            background-color: #1e8449;
+        }
+
+        /* Boutons Voir et Modifier sur page show */
+        .btn-show-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .btn-show-group a {
+            background-color: #8e44ad;
+            color: white;
+            padding: 0.75rem 1.8rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 3px 8px rgb(142 68 173 / 0.4);
+            transition: background-color 0.3s ease;
+            user-select: none;
+        }
+        .btn-show-group a:hover {
+            background-color: #732d91;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            main {
+                padding: 1.5rem 1.5rem;
+            }
+            form {
+                max-width: 100%;
+            }
+            button[type="submit"], .btn-cancel {
+                width: 100%;
+                margin: 0.5rem 0 0 0;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+            .btn-show-group {
+                flex-direction: column;
+            }
+            .btn-show-group a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+    {% endblock %}
+</head>
+<body>
+    <main>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {% block body %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,8 @@
+services:
+    _defaults:
+        autowire: true      # Injection automatique des dépendances (EntityManager etc.)
+        autoconfigure: true # Tags automatiques comme controller.service_arguments
+
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'

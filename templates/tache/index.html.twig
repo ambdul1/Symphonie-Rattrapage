@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Tâches{% endblock %}
+
+{% block body %}
+<h1>Liste des Tâches</h1>
+
+<table class="table-taches">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Description</th>
+            <th>Date limite</th>
+            <th>Terminée</th>
+            <th>Priorité</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if taches is empty %}
+        <tr>
+            <td colspan="6" style="text-align:center; font-style: italic;">Aucune tâche trouvée</td>
+        </tr>
+    {% else %}
+        {% for tache in taches %}
+            <tr>
+                <td>{{ tache.titre }}</td>
+                <td>{{ tache.description }}</td>
+                <td>{{ tache.dateLimite ? tache.dateLimite|date('d/m/Y') : '' }}</td>
+                <td>{{ tache.terminee ? '✔️' : '' }}</td>
+                <td>{{ tache.priorite }}</td>
+                <td class="actions">
+                    <a href="{{ path('app_tache_show', {'id': tache.id}) }}" class="btn btn-view">Voir</a>
+                    <a href="{{ path('app_tache_edit', {'id': tache.id}) }}" class="btn btn-edit">Modifier</a>
+                    <form method="post" action="{{ path('app_tache_delete', {'id': tache.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tache.id) }}">
+                        <button class="btn btn-delete" type="submit">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+    </tbody>
+</table>
+
+<div class="create-task-container">
+    <a href="{{ path('app_tache_new') }}" class="btn btn-create">Créer une nouvelle tâche</a>
+</div>
+
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    h1 {
+        text-align: center;
+        margin-bottom: 1rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #2c3e50;
+    }
+    .table-taches {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 auto 2rem auto;
+        font-family: Arial, sans-serif;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .table-taches th, .table-taches td {
+        border: 1px solid #ddd;
+        padding: 10px 12px;
+        text-align: left;
+        vertical-align: middle;
+    }
+    .table-taches th {
+        background-color: #34495e;
+        color: white;
+        font-weight: 600;
+    }
+    .table-taches tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .actions a, .actions form {
+        margin-right: 8px;
+    }
+    .actions .btn {
+        padding: 5px 12px;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        text-decoration: none;
+        color: white;
+        transition: background-color 0.3s ease;
+        user-select: none;
+    }
+    .btn-view {
+        background-color: #2980b9;
+    }
+    .btn-view:hover {
+        background-color: #1c5980;
+    }
+    .btn-edit {
+        background-color: #27ae60;
+    }
+    .btn-edit:hover {
+        background-color: #1e8449;
+    }
+    .btn-delete {
+        background-color: #c0392b;
+    }
+    .btn-delete:hover {
+        background-color: #82241f;
+    }
+    /* Conteneur pour le bouton créer tâche en bas */
+    .create-task-container {
+        text-align: center;
+        margin-top: 30px;
+    }
+    .btn-create {
+        background-color: #8e44ad; /* violet foncé, différent du bleu */
+        padding: 12px 24px;
+        font-size: 1.1rem;
+        border-radius: 5px;
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+        user-select: none;
+    }
+    .btn-create:hover {
+        background-color: #732d91;
+    }
+</style>
+{% endblock %}
